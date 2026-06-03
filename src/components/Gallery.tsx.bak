@@ -1,4 +1,3 @@
-"use client";
 const images = [
   { src: "/images/reyna-wallpaper.jpg", label: "Reyna · neon", border: "#6b21a8" },
   { src: "/images/reyna1.png", label: "Reyna · magenta", border: "#9d174d" },

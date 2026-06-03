@@ -1,4 +1,3 @@
-"use client";
 const projects = [
   { num: "01", icon: "🤖", title: "AI Chess Engine", tech: "Python · React · Minimax", tag: "AI/ML", stars: 142, border: "#6b21a8", bg: "#130b20", accent: "#b026ff" },
   { num: "02", icon: "📊", title: "Game Analytics", tech: "Firebase · Next.js", tag: "Real-time", stars: 89, border: "#0369a1", bg: "#0c1520", accent: "#38bdf8" },

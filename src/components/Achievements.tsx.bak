@@ -1,4 +1,3 @@
-"use client";
 const achievements = [
   { icon: "🏆", title: "Hackathon Winner", sub: "Smart India Hackathon 2023", xp: "+500 XP", bg: "#130b20", border: "#6b21a8", accent: "#c4b5fd" },
   { icon: "🚀", title: "Open Source Hero", sub: "5+ merged PRs · active contributor", xp: "+300 XP", bg: "#0c1520", border: "#0369a1", accent: "#7dd3fc" },
