@@ -2,7 +2,7 @@
 
 export default function Hero() {
   return (
-    <section id="hero" style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", overflow: "hidden", background: "#c8b8e8" }}>
+    <section id="hero" style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", overflow: "hidden", background: "#c8b8e8" }}>
       <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
         <div style={{ position: "absolute", width: 500, height: 500, borderRadius: "50%", border: "3px solid rgba(160,120,220,0.4)", top: -100, left: -80, animation: "swirlBg 18s linear infinite" }} />
         <div style={{ position: "absolute", width: 380, height: 380, borderRadius: "50%", border: "2px solid rgba(200,160,255,0.3)", top: 20, right: -100, animation: "swirlBg 12s linear infinite reverse" }} />
@@ -10,7 +10,7 @@ export default function Hero() {
       <div style={{ position: "absolute", left: 0, right: 0, height: 2, background: "rgba(160,100,220,0.2)", animation: "scanline 5s linear infinite", pointerEvents: "none" }} />
       <Particles />
 
-      <div style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "120px 40px 40px", width: "100%" }}>
+      <div style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "120px 40px 20px", width: "100%" }}>
         <div style={{ fontFamily: "Space Mono, monospace", fontSize: 11, letterSpacing: "0.2em", color: "#6d28d9", marginBottom: 10 }}>// agent selected</div>
         <h1 style={{ fontFamily: "Space Mono, monospace", fontSize: 52, fontWeight: 700, color: "#2e1065", lineHeight: 1.15, marginBottom: 8, animation: "glitchX 6s ease-in-out infinite" }}>
           Vineeta<span style={{ color: "#7c3aed" }}>_</span>007
@@ -40,15 +40,13 @@ export default function Hero() {
         </div>
       </div>
 
-      <div style={{ position: "relative", zIndex: 10, width: "100%", display: "flex", justifyContent: "center", alignItems: "flex-end" }}>
-        <div style={{ position: "relative", width: 380, height: 420 }}>
-          <div style={{ position: "absolute", inset: 0, borderRadius: "50% 50% 0 0", background: "rgba(147,51,234,0.2)", filter: "blur(24px)", animation: "pulseRing 3s ease-in-out infinite" }} />
-          <img
-            src="/images/pic1.png"
-            alt="Vineeta"
-            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", borderRadius: "50% 50% 0 0", position: "relative", zIndex: 2, filter: "drop-shadow(0 0 30px rgba(147,51,234,0.5))" }}
-          />
-        </div>
+      <div style={{ position: "relative", zIndex: 10, marginTop: "auto", display: "flex", justifyContent: "center" }}>
+        <div style={{ position: "absolute", bottom: 0, width: 500, height: 200, background: "rgba(147,51,234,0.2)", filter: "blur(40px)", borderRadius: "50%" }} />
+        <img
+          src="/images/pic1.png"
+          alt="Vineeta"
+          style={{ width: 500, height: "auto", display: "block", position: "relative", zIndex: 2, filter: "drop-shadow(0 0 40px rgba(147,51,234,0.6))" }}
+        />
       </div>
 
     </section>
