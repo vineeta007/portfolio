@@ -1,26 +1,63 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Rajdhani:wght@400;500;600;700&display=swap');
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #0a0812;
+  color: #f0eaff;
+  font-family: 'Rajdhani', sans-serif;
+  overflow-x: hidden;
+}
+
+.mono { font-family: 'Space Mono', monospace; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0a0812; }
+::-webkit-scrollbar-thumb { background: #b026ff; border-radius: 99px; }
+
+@keyframes pulseRing {
+  0%, 100% { transform: scale(1); opacity: .8; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+@keyframes scanline {
+  0% { top: -40px; }
+  100% { top: 110%; }
+}
+@keyframes glitchX {
+  0%, 95%, 100% { transform: translateX(0); }
+  96% { transform: translateX(-4px); }
+  97% { transform: translateX(4px); }
+  98% { transform: translateX(-2px); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes swirlBg {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes shimmer {
+  0%, 100% { opacity: .4; }
+  50% { opacity: .9; }
+}
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+@keyframes skillFill {
+  from { width: 0; }
+  to { width: var(--w); }
+}
+@keyframes particleDrift {
+  0% { transform: translateY(0) translateX(0); opacity: 1; }
+  100% { transform: translateY(-60px) translateX(var(--dx)); opacity: 0; }
+}
+@keyframes borderPulseLav {
+  0%, 100% { border-color: #9b72cf; }
+  50% { border-color: #e879f9; }
 }
