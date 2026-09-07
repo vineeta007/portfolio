@@ -8,13 +8,20 @@ const Scene = dynamic(() => import("./Scene"), { ssr: false });
 
 const TAGS = ["TypeScript", "Next.js", "RAG / LLMs", "Machine Learning", "Python"];
 
+type Mode = "none" | "full" | "compact";
+
 export default function Hero() {
-  const [rich, setRich] = useState(false);
+  const [mode, setMode] = useState<Mode>("none");
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const small = window.matchMedia("(max-width: 900px)").matches;
-    setRich(!reduced && !small);
+    if (reduced) return;
+    const set = () =>
+      setMode(window.matchMedia("(max-width: 900px)").matches ? "compact" : "full");
+    set();
+    const mq = window.matchMedia("(max-width: 900px)");
+    mq.addEventListener("change", set);
+    return () => mq.removeEventListener("change", set);
   }, []);
 
   return (
@@ -28,10 +35,17 @@ export default function Hero() {
         overflow: "hidden",
       }}
     >
-      <div className="hero-canvas" style={{ position: "absolute", inset: 0, left: "34%", zIndex: 1 }}>
-        {rich ? (
-          <Scene />
-        ) : (
+      <div
+        className="hero-canvas"
+        style={{
+          position: "absolute",
+          inset: 0,
+          left: mode === "full" ? "40%" : 0,
+          zIndex: 1,
+          opacity: mode === "compact" ? 0.5 : 1,
+        }}
+      >
+        {mode === "none" ? (
           <div
             style={{
               position: "absolute",
@@ -46,6 +60,8 @@ export default function Hero() {
               filter: "blur(30px)",
             }}
           />
+        ) : (
+          <Scene interactive={mode === "full"} compact={mode === "compact"} />
         )}
       </div>
 
@@ -145,7 +161,9 @@ export default function Hero() {
           className="mono"
           style={{ marginTop: 20, fontSize: 10.5, letterSpacing: "0.16em", color: "var(--text-mute)" }}
         >
-          {"// drag the core · it spins as you scroll"}
+          {mode === "full"
+            ? "// drag the core · it spins as you scroll"
+            : "// it spins as you scroll"}
         </div>
       </div>
 

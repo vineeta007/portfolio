@@ -72,11 +72,19 @@ function Core() {
   );
 }
 
-export default function Scene() {
+export default function Scene({
+  interactive = true,
+  compact = false,
+}: {
+  interactive?: boolean;
+  compact?: boolean;
+}) {
+  const pos: [number, number, number] = compact ? [0.6, 1.9, 0] : [3.2, 0.2, 0];
+
   return (
     <Canvas
-      dpr={[1, 1.8]}
-      camera={{ position: [0, 0, 6], fov: 42 }}
+      dpr={compact ? [1, 1.5] : [1, 1.8]}
+      camera={{ position: [0, 0, compact ? 7.4 : 6], fov: compact ? 46 : 42 }}
       gl={{ antialias: true, alpha: true }}
       style={{ position: "absolute", inset: 0 }}
     >
@@ -85,24 +93,26 @@ export default function Scene() {
       <pointLight position={[-5, -2, 3]} intensity={55} color="#35e0e8" />
       <Suspense fallback={null}>
         <ScrollSpin>
-          <group position={[2.5, 0.2, 0]} scale={0.78}>
+          <group position={pos} scale={compact ? 0.5 : 0.78}>
             <Core />
           </group>
         </ScrollSpin>
       </Suspense>
-      <OrbitControls
-        makeDefault
-        enableZoom={false}
-        enablePan={false}
-        enableDamping
-        dampingFactor={0.06}
-        rotateSpeed={0.55}
-        autoRotate
-        autoRotateSpeed={0.7}
-        minPolarAngle={Math.PI * 0.3}
-        maxPolarAngle={Math.PI * 0.72}
-        target={[2.3, 0.2, 0]}
-      />
+      {interactive && (
+        <OrbitControls
+          makeDefault
+          enableZoom={false}
+          enablePan={false}
+          enableDamping
+          dampingFactor={0.06}
+          rotateSpeed={0.55}
+          autoRotate
+          autoRotateSpeed={0.7}
+          minPolarAngle={Math.PI * 0.3}
+          maxPolarAngle={Math.PI * 0.72}
+          target={[pos[0] - 0.2, pos[1], 0]}
+        />
+      )}
     </Canvas>
   );
 }
