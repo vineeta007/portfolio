@@ -88,19 +88,6 @@ export default function Hero() {
           pointerEvents: "none",
         }}
       >
-        <div
-          className="mono"
-          style={{
-            fontSize: 12,
-            letterSpacing: "0.24em",
-            color: "var(--violet)",
-            marginBottom: 18,
-          }}
-        >
-          {"// "}
-          <Typewriter text="agent_online" speed={45} />
-        </div>
-
         <h1
           className="hero-name"
           style={{
