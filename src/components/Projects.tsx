@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useState } from "react";
 import Reveal from "./Reveal";
 import { PROJECTS, type Project } from "@/lib/data";
 
@@ -19,92 +19,131 @@ function GitIcon() {
   );
 }
 
-function Card({ p, i }: { p: Project; i: number }) {
-  const ref = useRef<HTMLDivElement>(null);
+function stop(e: React.MouseEvent) {
+  e.stopPropagation();
+}
 
-  const onMove = (e: React.MouseEvent) => {
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    el.style.transform = `perspective(900px) rotateY(${px * 6}deg) rotateX(${-py * 6}deg) translateY(-4px)`;
-  };
-  const reset = () => {
-    if (ref.current) ref.current.style.transform = "perspective(900px) rotateY(0) rotateX(0) translateY(0)";
-  };
+function Card({ p, i }: { p: Project; i: number }) {
+  const [flipped, setFlipped] = useState(false);
+  const num = String(i + 1).padStart(2, "0");
 
   return (
     <Reveal delay={i * 70}>
       <div
-        ref={ref}
-        onMouseMove={onMove}
-        onMouseLeave={reset}
-        className="card card-glow"
-        style={{
-          padding: 22,
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          transition: "transform 0.18s ease-out, box-shadow 0.3s",
-          willChange: "transform",
+        className="flip"
+        role="button"
+        tabIndex={0}
+        aria-pressed={flipped}
+        aria-label={`${p.title} — ${flipped ? "hide" : "show"} details`}
+        onClick={() => setFlipped((f) => !f)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setFlipped((f) => !f);
+          }
         }}
       >
-        <div
-          aria-hidden
-          style={{
-            position: "absolute",
-            top: -30,
-            right: -10,
-            fontFamily: "var(--font-mono)",
-            fontSize: 90,
-            fontWeight: 700,
-            color: p.accent,
-            opacity: 0.07,
-            lineHeight: 1,
-          }}
-        >
-          {String(i + 1).padStart(2, "0")}
-        </div>
-
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
-          <h3 style={{ fontSize: 19, fontWeight: 700, letterSpacing: "-0.01em" }}>{p.title}</h3>
-          <span className="mono" style={{ fontSize: 11, color: "var(--text-mute)" }}>{p.year}</span>
-        </div>
-
-        <p style={{ marginTop: 10, fontSize: 13.5, color: "var(--text-dim)", lineHeight: 1.6, flex: 1 }}>
-          {p.blurb}
-        </p>
-
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 16 }}>
-          {p.tech.map((t) => (
-            <span key={t} className="chip" style={{ fontSize: 10 }}>{t}</span>
-          ))}
-        </div>
-
-        <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
-          {p.live && (
-            <a
-              href={p.live}
-              target="_blank"
-              rel="noopener noreferrer"
+        <div className="flip-inner" style={{ transform: flipped ? "rotateY(180deg)" : "none" }}>
+          {/* FRONT */}
+          <div className="flip-face card" style={{ padding: 22, justifyContent: "center" }}>
+            <span
+              aria-hidden
               className="mono"
-              style={{ fontSize: 11.5, color: p.accent, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 5 }}
+              style={{
+                position: "absolute",
+                top: 14,
+                right: 18,
+                fontSize: 72,
+                fontWeight: 700,
+                color: p.accent,
+                opacity: 0.09,
+                lineHeight: 1,
+              }}
             >
-              live <ArrowIcon />
-            </a>
-          )}
-          {p.repo && (
-            <a
-              href={p.repo}
-              target="_blank"
-              rel="noopener noreferrer"
+              {num}
+            </span>
+            <span
+              aria-hidden
+              style={{ position: "absolute", top: 0, left: 0, width: 40, height: 3, background: p.accent, opacity: 0.9 }}
+            />
+
+            <div>
+              <div className="mono" style={{ fontSize: 11, color: "var(--text-mute)", marginBottom: 8 }}>
+                {p.year}
+              </div>
+              <h3 style={{ fontSize: 23, fontWeight: 700, letterSpacing: "-0.015em", lineHeight: 1.15 }}>
+                {p.title}
+              </h3>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 14 }}>
+                {p.tech.slice(0, 3).map((t) => (
+                  <span key={t} className="chip" style={{ fontSize: 10 }}>{t}</span>
+                ))}
+              </div>
+            </div>
+
+            <div
               className="mono"
-              style={{ fontSize: 11.5, color: "var(--text-dim)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 5 }}
+              style={{
+                position: "absolute",
+                left: 22,
+                bottom: 20,
+                fontSize: 10.5,
+                letterSpacing: "0.08em",
+                color: p.accent,
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+              }}
             >
-              <GitIcon /> code
-            </a>
-          )}
+              tap for details <span style={{ fontSize: 13 }}>⇄</span>
+            </div>
+          </div>
+
+          {/* BACK */}
+          <div className="flip-face flip-back card" style={{ padding: 22, borderColor: p.accent }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
+              <h3 style={{ fontSize: 16, fontWeight: 700 }}>{p.title}</h3>
+              <span className="mono" style={{ fontSize: 10.5, color: "var(--text-mute)" }}>{p.year}</span>
+            </div>
+
+            <p style={{ marginTop: 10, fontSize: 12.5, color: "var(--text-dim)", lineHeight: 1.55, overflow: "auto" }}>
+              {p.blurb}
+            </p>
+
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginTop: "auto", paddingTop: 12 }}>
+              {p.tech.map((t) => (
+                <span key={t} className="chip" style={{ fontSize: 9.5, padding: "3px 8px" }}>{t}</span>
+              ))}
+            </div>
+
+            <div style={{ display: "flex", gap: 14, marginTop: 12, alignItems: "center" }}>
+              {p.live && (
+                <a
+                  href={p.live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={stop}
+                  className="mono"
+                  style={{ fontSize: 11.5, color: p.accent, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 5 }}
+                >
+                  live <ArrowIcon />
+                </a>
+              )}
+              {p.repo && (
+                <a
+                  href={p.repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={stop}
+                  className="mono"
+                  style={{ fontSize: 11.5, color: "var(--text-dim)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 5 }}
+                >
+                  <GitIcon /> code
+                </a>
+              )}
+              <span className="mono" style={{ marginLeft: "auto", fontSize: 10, color: "var(--text-mute)" }}>⇄ back</span>
+            </div>
+          </div>
         </div>
       </div>
     </Reveal>
@@ -122,14 +161,14 @@ export default function Projects() {
           <a href="https://github.com/vineeta007" target="_blank" rel="noopener noreferrer" style={{ color: "var(--violet)" }}>
             github.com/vineeta007
           </a>
-          {" "}— shipped apps, AI experiments and coursework I kept iterating on.
+          {" "}— tap a card to flip it for the details.
         </p>
       </Reveal>
 
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
           gap: 16,
           marginTop: 44,
         }}
@@ -138,6 +177,35 @@ export default function Projects() {
           <Card key={p.key} p={p} i={i} />
         ))}
       </div>
+
+      <style>{`
+        .flip {
+          perspective: 1400px;
+          height: 296px;
+          cursor: pointer;
+          border-radius: 16px;
+          outline: none;
+          transition: box-shadow 0.3s, transform 0.3s;
+        }
+        .flip:hover { transform: translateY(-3px); box-shadow: 0 22px 50px -26px var(--glow-violet); }
+        .flip:focus-visible { box-shadow: 0 0 0 2px var(--violet); }
+        .flip-inner {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+          transform-style: preserve-3d;
+        }
+        .flip-face {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          flex-direction: column;
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+        }
+        .flip-back { transform: rotateY(180deg); }
+      `}</style>
     </section>
   );
 }
