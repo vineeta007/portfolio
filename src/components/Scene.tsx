@@ -1,18 +1,35 @@
 "use client";
 import { Suspense, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, Icosahedron, MeshDistortMaterial, Sparkles } from "@react-three/drei";
+import { Float, Icosahedron, MeshDistortMaterial, Sparkles, OrbitControls, Torus } from "@react-three/drei";
 import type { Group } from "three";
 
-function Rig({ children }: { children: React.ReactNode }) {
-  const group = useRef<Group>(null);
-  useFrame((state, delta) => {
-    if (!group.current) return;
-    const { x, y } = state.pointer;
-    group.current.rotation.y += (x * 0.35 - group.current.rotation.y) * Math.min(1, delta * 2);
-    group.current.rotation.x += (-y * 0.25 - group.current.rotation.x) * Math.min(1, delta * 2);
+/* rotates the whole rig from page scroll — the "spin as you scroll" effect */
+function ScrollSpin({ children }: { children: React.ReactNode }) {
+  const g = useRef<Group>(null);
+  useFrame(() => {
+    if (!g.current) return;
+    const s = typeof window !== "undefined" ? window.scrollY : 0;
+    g.current.rotation.y = s * 0.0016;
+    g.current.rotation.x = s * 0.0007;
   });
-  return <group ref={group}>{children}</group>;
+  return <group ref={g}>{children}</group>;
+}
+
+function Satellite() {
+  const g = useRef<Group>(null);
+  useFrame((_, dt) => {
+    if (g.current) g.current.rotation.y += dt * 0.5;
+  });
+  return (
+    <group ref={g}>
+      <group position={[2.35, 0.3, 0]}>
+        <Icosahedron args={[0.22, 1]}>
+          <meshStandardMaterial color="#35e0e8" emissive="#35e0e8" emissiveIntensity={0.7} roughness={0.3} />
+        </Icosahedron>
+      </group>
+    </group>
+  );
 }
 
 function Core() {
@@ -33,16 +50,23 @@ function Core() {
             emissiveIntensity={0.35}
             roughness={0.15}
             metalness={0.6}
-            distort={0.38}
-            speed={1.6}
+            distort={0.4}
+            speed={1.8}
           />
         </Icosahedron>
       </Float>
+
       <group ref={shell}>
         <Icosahedron args={[2.15, 1]}>
           <meshBasicMaterial wireframe color="#ff3d8a" transparent opacity={0.14} />
         </Icosahedron>
       </group>
+
+      <Torus args={[2, 0.012, 16, 90]} rotation={[Math.PI / 2.4, 0.3, 0]}>
+        <meshBasicMaterial color="#35e0e8" transparent opacity={0.5} />
+      </Torus>
+
+      <Satellite />
       <Sparkles count={70} scale={7} size={2.4} speed={0.35} color="#c9a6ff" opacity={0.7} />
     </>
   );
@@ -60,12 +84,25 @@ export default function Scene() {
       <pointLight position={[4, 3, 5]} intensity={70} color="#ff3d8a" />
       <pointLight position={[-5, -2, 3]} intensity={55} color="#35e0e8" />
       <Suspense fallback={null}>
-        <Rig>
+        <ScrollSpin>
           <group position={[1.5, 0.2, 0]} scale={0.82}>
             <Core />
           </group>
-        </Rig>
+        </ScrollSpin>
       </Suspense>
+      <OrbitControls
+        makeDefault
+        enableZoom={false}
+        enablePan={false}
+        enableDamping
+        dampingFactor={0.06}
+        rotateSpeed={0.55}
+        autoRotate
+        autoRotateSpeed={0.7}
+        minPolarAngle={Math.PI * 0.3}
+        maxPolarAngle={Math.PI * 0.72}
+        target={[1.3, 0.2, 0]}
+      />
     </Canvas>
   );
 }

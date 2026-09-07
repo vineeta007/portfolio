@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { PROFILE } from "@/lib/data";
+import { Scramble, Typewriter } from "./TextFX";
 
 const Scene = dynamic(() => import("./Scene"), { ssr: false });
 
@@ -12,7 +13,7 @@ export default function Hero() {
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const small = window.matchMedia("(max-width: 640px)").matches;
+    const small = window.matchMedia("(max-width: 900px)").matches;
     setRich(!reduced && !small);
   }, []);
 
@@ -27,7 +28,7 @@ export default function Hero() {
         overflow: "hidden",
       }}
     >
-      <div className="hero-canvas" style={{ position: "absolute", inset: 0, left: "28%", zIndex: 0 }}>
+      <div className="hero-canvas" style={{ position: "absolute", inset: 0, left: "26%", zIndex: 1 }}>
         {rich ? (
           <Scene />
         ) : (
@@ -53,59 +54,66 @@ export default function Hero() {
         style={{
           position: "absolute",
           inset: 0,
-          zIndex: 0,
+          zIndex: 1,
+          pointerEvents: "none",
           background:
-            "linear-gradient(90deg, var(--bg) 0%, rgba(6,6,13,0.85) 34%, rgba(6,6,13,0.2) 55%, transparent 75%)",
+            "linear-gradient(90deg, var(--bg) 0%, rgba(6,6,13,0.82) 32%, rgba(6,6,13,0.15) 52%, transparent 72%)",
         }}
       />
 
       <div
         style={{
           position: "relative",
-          zIndex: 1,
+          zIndex: 2,
           maxWidth: "var(--maxw)",
           margin: "0 auto",
           padding: "150px 24px 110px",
           width: "100%",
+          pointerEvents: "none",
         }}
       >
         <div
-          className="mono reveal in"
-          style={{ fontSize: 12, letterSpacing: "0.24em", color: "var(--violet)", marginBottom: 18 }}
+          className="mono"
+          style={{
+            fontSize: 12,
+            letterSpacing: "0.24em",
+            color: "var(--violet)",
+            marginBottom: 18,
+          }}
         >
-          {"// agent_online"}
+          {"// "}
+          <Typewriter text="agent_online" speed={45} />
         </div>
 
         <h1
-          className="reveal in"
+          className="hero-name"
           style={{
             fontSize: "clamp(44px, 9vw, 92px)",
             fontWeight: 700,
             letterSpacing: "-0.03em",
             lineHeight: 1.02,
-            animationDelay: "80ms",
-            textShadow: "0 0 60px rgba(176,107,255,0.25)",
+            textShadow: "0 0 60px rgba(176,107,255,0.28)",
           }}
         >
-          Vineeta
+          <Scramble text="Vineeta" delay={120} />
           <br />
-          Devnani
-          <span style={{ color: "var(--magenta)" }}>_</span>
+          <Scramble text="Devnani" delay={340} />
+          <span className="hero-caret" style={{ color: "var(--magenta)" }}>
+            _
+          </span>
         </h1>
 
-        <p
-          className="reveal in lead"
-          style={{ marginTop: 22, fontSize: 17, animationDelay: "160ms", maxWidth: "44ch" }}
-        >
-          {PROFILE.role}. {PROFILE.tagline}.
+        <p className="lead" style={{ marginTop: 22, fontSize: 17, maxWidth: "44ch", minHeight: "4.6em" }}>
+          <Typewriter text={`${PROFILE.role}. ${PROFILE.tagline}.`} delay={900} speed={14} />
         </p>
 
-        <div
-          className="reveal in"
-          style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 26, animationDelay: "240ms" }}
-        >
-          {TAGS.map((t) => (
-            <span key={t} className="chip">
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 26 }}>
+          {TAGS.map((t, i) => (
+            <span
+              key={t}
+              className="chip reveal in"
+              style={{ animationDelay: `${1150 + i * 80}ms` }}
+            >
               {t}
             </span>
           ))}
@@ -113,7 +121,14 @@ export default function Hero() {
 
         <div
           className="reveal in"
-          style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 34, animationDelay: "320ms" }}
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 12,
+            marginTop: 34,
+            animationDelay: "1500ms",
+            pointerEvents: "auto",
+          }}
         >
           <a href="#work" className="btn btn-primary">
             view work →
@@ -125,6 +140,13 @@ export default function Hero() {
             contact
           </a>
         </div>
+
+        <div
+          className="mono"
+          style={{ marginTop: 20, fontSize: 10.5, letterSpacing: "0.16em", color: "var(--text-mute)" }}
+        >
+          {"// drag the core · it spins as you scroll"}
+        </div>
       </div>
 
       <a
@@ -135,7 +157,7 @@ export default function Hero() {
           bottom: 26,
           left: "50%",
           transform: "translateX(-50%)",
-          zIndex: 1,
+          zIndex: 2,
           fontFamily: "var(--font-mono)",
           fontSize: 10,
           letterSpacing: "0.2em",
@@ -159,8 +181,10 @@ export default function Hero() {
       </a>
 
       <style>{`
+        .hero-caret { animation: blink 0.9s step-end infinite; }
+        .hero-name:hover { animation: glitchX 0.4s ease-in-out; }
         @media (max-width: 900px) {
-          .hero-canvas { left: 0 !important; opacity: 0.6; }
+          .hero-canvas { left: 0 !important; opacity: 0.55; }
         }
       `}</style>
     </section>
