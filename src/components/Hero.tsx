@@ -134,10 +134,6 @@ export default function Hero() {
           pointerEvents: "none",
         }}
       >
-        <div className="mono" style={{ fontSize: 11, letterSpacing: "0.28em", color: "var(--violet)", marginBottom: 14 }}>
-          <Typewriter text="// initializing_agent" speed={38} />
-        </div>
-
         <div style={{ position: "relative", display: "inline-block" }}>
           <span aria-hidden className="hero-bloom" />
           <h1
