@@ -61,6 +61,17 @@ export const PROJECTS: Project[] = [
     year: "2026",
   },
   {
+    key: "portfolio",
+    title: "This Portfolio",
+    blurb:
+      "The site you're on — Next.js 16 App Router with a Three.js hero, live GitHub API stats, a Firestore-backed contact form and a hand-built design system. No UI kit.",
+    tech: ["Next.js", "TypeScript", "Three.js / R3F", "Firebase", "Framer Motion"],
+    repo: "https://github.com/vineeta007/portfolio",
+    live: "https://portfolio-opal-three-54.vercel.app",
+    accent: "var(--cyan)",
+    year: "2026",
+  },
+  {
     key: "ann",
     title: "Artificial Neural Network",
     blurb:
@@ -81,13 +92,33 @@ export const PROJECTS: Project[] = [
     year: "2024",
   },
   {
-    key: "lenskart",
-    title: "Lenskart Clone",
+    key: "sms-java",
+    title: "Student Management System",
     blurb:
-      "Pixel-focused front-end rebuild of the Lenskart eyewear store — responsive product grid and layout, hand-written HTML/CSS.",
-    tech: ["HTML", "CSS", "Responsive UI"],
-    repo: "https://github.com/vineeta007/lenscart_clone",
-    accent: "var(--violet)",
+      "Desktop Java/Swing app from 4th-sem coursework — student enrolment, marks tracking, login/auth, admin dashboards and a messaging module, built with an OOP manager-class architecture.",
+    tech: ["Java", "Swing", "OOP"],
+    repo: "https://github.com/vineeta007/Java-Project-Final-Sem-4",
+    accent: "var(--magenta)",
+    year: "2024",
+  },
+  {
+    key: "r-prime",
+    title: "Prime Video Data Analysis",
+    blurb:
+      "R summative assessment — exploratory analysis of an Amazon Prime Video catalogue dataset, from an Excel source through cleaning to insights.",
+    tech: ["R", "Data Analysis", "Excel"],
+    repo: "https://github.com/vineeta007/R-summative-Assesment",
+    accent: "var(--cyan)",
+    year: "2024",
+  },
+  {
+    key: "cafe-order",
+    title: "Online Cafe Ordering",
+    blurb:
+      "Training-project ordering page — a café menu with per-item quantity selectors and a live running total.",
+    tech: ["HTML", "JavaScript"],
+    repo: "https://github.com/vineeta007/Professional-Training",
+    accent: "var(--amber)",
     year: "2024",
   },
 ];
