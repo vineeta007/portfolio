@@ -65,9 +65,14 @@ function Core() {
       <Torus args={[2, 0.012, 16, 90]} rotation={[Math.PI / 2.4, 0.3, 0]}>
         <meshBasicMaterial color="#35e0e8" transparent opacity={0.5} />
       </Torus>
+      <Torus args={[2.4, 0.008, 14, 100]} rotation={[Math.PI / 1.7, -0.5, 0.6]}>
+        <meshBasicMaterial color="#ff3d8a" transparent opacity={0.35} />
+      </Torus>
 
       <Satellite />
-      <Sparkles count={70} scale={7} size={2.4} speed={0.35} color="#c9a6ff" opacity={0.7} />
+      <Sparkles count={80} scale={7} size={2.4} speed={0.35} color="#c9a6ff" opacity={0.7} />
+      <Sparkles count={40} scale={11} size={4} speed={0.15} color="#35e0e8" opacity={0.35} />
+      <Sparkles count={30} scale={5} size={1.6} speed={0.6} color="#ff8fc4" opacity={0.6} />
     </>
   );
 }
@@ -88,9 +93,10 @@ export default function Scene({
       gl={{ antialias: true, alpha: true }}
       style={{ position: "absolute", inset: 0 }}
     >
-      <ambientLight intensity={0.5} />
-      <pointLight position={[4, 3, 5]} intensity={70} color="#ff3d8a" />
-      <pointLight position={[-5, -2, 3]} intensity={55} color="#35e0e8" />
+      <ambientLight intensity={0.55} />
+      <pointLight position={[4, 3, 5]} intensity={85} color="#ff3d8a" />
+      <pointLight position={[-5, -2, 3]} intensity={65} color="#35e0e8" />
+      <pointLight position={[0, 4, -4]} intensity={40} color="#b06bff" />
       <Suspense fallback={null}>
         <ScrollSpin>
           <group position={pos} scale={compact ? 0.5 : 0.78}>
