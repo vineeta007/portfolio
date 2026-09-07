@@ -85,7 +85,7 @@ export default function Scene() {
       <pointLight position={[-5, -2, 3]} intensity={55} color="#35e0e8" />
       <Suspense fallback={null}>
         <ScrollSpin>
-          <group position={[1.5, 0.2, 0]} scale={0.82}>
+          <group position={[2.5, 0.2, 0]} scale={0.78}>
             <Core />
           </group>
         </ScrollSpin>
@@ -101,7 +101,7 @@ export default function Scene() {
         autoRotateSpeed={0.7}
         minPolarAngle={Math.PI * 0.3}
         maxPolarAngle={Math.PI * 0.72}
-        target={[1.3, 0.2, 0]}
+        target={[2.3, 0.2, 0]}
       />
     </Canvas>
   );

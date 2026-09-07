@@ -28,7 +28,7 @@ export default function Hero() {
         overflow: "hidden",
       }}
     >
-      <div className="hero-canvas" style={{ position: "absolute", inset: 0, left: "26%", zIndex: 1 }}>
+      <div className="hero-canvas" style={{ position: "absolute", inset: 0, left: "34%", zIndex: 1 }}>
         {rich ? (
           <Scene />
         ) : (
