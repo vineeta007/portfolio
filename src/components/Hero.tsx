@@ -1,54 +1,168 @@
-﻿import Particles from "./Particles";
+"use client";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { PROFILE } from "@/lib/data";
+
+const Scene = dynamic(() => import("./Scene"), { ssr: false });
+
+const TAGS = ["TypeScript", "Next.js", "RAG / LLMs", "Machine Learning", "Python"];
 
 export default function Hero() {
-  return (
-    <section id="hero" style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", overflow: "hidden", background: "#c8b8e8" }}>
-      <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
-        <div style={{ position: "absolute", width: 500, height: 500, borderRadius: "50%", border: "3px solid rgba(160,120,220,0.4)", top: -100, left: -80, animation: "swirlBg 18s linear infinite" }} />
-        <div style={{ position: "absolute", width: 380, height: 380, borderRadius: "50%", border: "2px solid rgba(200,160,255,0.3)", top: 20, right: -100, animation: "swirlBg 12s linear infinite reverse" }} />
-      </div>
-      <div style={{ position: "absolute", left: 0, right: 0, height: 2, background: "rgba(160,100,220,0.2)", animation: "scanline 5s linear infinite", pointerEvents: "none" }} />
-      <Particles />
+  const [rich, setRich] = useState(false);
 
-      <div style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "120px 40px 20px", width: "100%" }}>
-        <div style={{ fontFamily: "Space Mono, monospace", fontSize: 11, letterSpacing: "0.2em", color: "#6d28d9", marginBottom: 10 }}>// agent selected</div>
-        <h1 style={{ fontFamily: "Space Mono, monospace", fontSize: 52, fontWeight: 700, color: "#2e1065", lineHeight: 1.15, marginBottom: 8, animation: "glitchX 6s ease-in-out infinite" }}>
-          Vineeta<span style={{ color: "#7c3aed" }}>_</span>007
-        </h1>
-        <div style={{ fontFamily: "Space Mono, monospace", fontSize: 15, color: "#6d28d9", overflow: "hidden", whiteSpace: "nowrap", borderRight: "2px solid #7c3aed", width: "fit-content", margin: "0 auto 24px", animation: "typewriter 2.5s steps(28,end) 1s both, blink .8s step-end infinite 3.5s" }}>
-          Tech Dev · Game Builder · Creator
+  useEffect(() => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const small = window.matchMedia("(max-width: 640px)").matches;
+    setRich(!reduced && !small);
+  }, []);
+
+  return (
+    <section
+      id="home"
+      style={{
+        position: "relative",
+        minHeight: "100svh",
+        display: "flex",
+        alignItems: "center",
+        overflow: "hidden",
+      }}
+    >
+      <div className="hero-canvas" style={{ position: "absolute", inset: 0, left: "28%", zIndex: 0 }}>
+        {rich ? (
+          <Scene />
+        ) : (
+          <div
+            style={{
+              position: "absolute",
+              top: "40%",
+              left: "50%",
+              width: 340,
+              height: 340,
+              transform: "translate(-50%,-50%)",
+              borderRadius: "50%",
+              background:
+                "radial-gradient(circle, rgba(176,107,255,0.45), rgba(255,61,138,0.15) 45%, transparent 70%)",
+              filter: "blur(30px)",
+            }}
+          />
+        )}
+      </div>
+
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 0,
+          background:
+            "linear-gradient(90deg, var(--bg) 0%, rgba(6,6,13,0.85) 34%, rgba(6,6,13,0.2) 55%, transparent 75%)",
+        }}
+      />
+
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          maxWidth: "var(--maxw)",
+          margin: "0 auto",
+          padding: "150px 24px 110px",
+          width: "100%",
+        }}
+      >
+        <div
+          className="mono reveal in"
+          style={{ fontSize: 12, letterSpacing: "0.24em", color: "var(--violet)", marginBottom: 18 }}
+        >
+          {"// agent_online"}
         </div>
-        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 8, marginBottom: 24 }}>
-          {[
-            { label: "React", color: "#4c1d95", border: "#7c3aed", bg: "rgba(167,139,250,0.2)" },
-            { label: "Firebase", color: "#1e3a5f", border: "#2563eb", bg: "rgba(59,130,246,0.15)" },
-            { label: "Unity", color: "#4a1942", border: "#a21caf", bg: "rgba(192,38,211,0.15)" },
-            { label: "Next.js", color: "#14532d", border: "#16a34a", bg: "rgba(34,197,94,0.15)" },
-            { label: "AI/ML", color: "#451a03", border: "#d97706", bg: "rgba(245,158,11,0.18)" },
-          ].map((tag) => (
-            <span key={tag.label} style={{ fontFamily: "Space Mono, monospace", fontSize: 11, fontWeight: 700, padding: "3px 12px", borderRadius: 99, border: "1.5px solid " + tag.border, color: tag.color, background: tag.bg }}>
-              {tag.label}
+
+        <h1
+          className="reveal in"
+          style={{
+            fontSize: "clamp(44px, 9vw, 92px)",
+            fontWeight: 700,
+            letterSpacing: "-0.03em",
+            lineHeight: 1.02,
+            animationDelay: "80ms",
+            textShadow: "0 0 60px rgba(176,107,255,0.25)",
+          }}
+        >
+          Vineeta
+          <br />
+          Devnani
+          <span style={{ color: "var(--magenta)" }}>_</span>
+        </h1>
+
+        <p
+          className="reveal in lead"
+          style={{ marginTop: 22, fontSize: 17, animationDelay: "160ms", maxWidth: "44ch" }}
+        >
+          {PROFILE.role}. {PROFILE.tagline}.
+        </p>
+
+        <div
+          className="reveal in"
+          style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 26, animationDelay: "240ms" }}
+        >
+          {TAGS.map((t) => (
+            <span key={t} className="chip">
+              {t}
             </span>
           ))}
         </div>
-        <div style={{ display: "flex", gap: 16, justifyContent: "center", marginBottom: 16 }}>
-          <a href="#projects" style={{ fontFamily: "Space Mono, monospace", fontSize: 13, fontWeight: 700, padding: "12px 24px", borderRadius: 12, border: "2px solid #7c3aed", color: "#4c1d95", background: "rgba(167,139,250,0.2)", textDecoration: "none" }}>view projects</a>
-          <a href="#contact" style={{ fontFamily: "Space Mono, monospace", fontSize: 13, fontWeight: 700, padding: "12px 24px", borderRadius: 12, border: "2px solid #a21caf", color: "#4a1942", background: "rgba(192,38,211,0.15)", textDecoration: "none" }}>contact me</a>
-        </div>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(180,150,230,0.25)", border: "1px solid #9333ea", borderRadius: 99, padding: "6px 16px" }}>
-          <span style={{ fontFamily: "Space Mono, monospace", fontSize: 12, fontWeight: 700, color: "#6d28d9" }}>@vineeta.007</span>
+
+        <div
+          className="reveal in"
+          style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 34, animationDelay: "320ms" }}
+        >
+          <a href="#work" className="btn btn-primary">
+            view work →
+          </a>
+          <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="btn">
+            github
+          </a>
+          <a href="#contact" className="btn">
+            contact
+          </a>
         </div>
       </div>
 
-      <div style={{ position: "relative", zIndex: 10, marginTop: "auto", display: "flex", justifyContent: "center" }}>
-        <div style={{ position: "absolute", bottom: 0, width: 500, height: 200, background: "rgba(147,51,234,0.2)", filter: "blur(40px)", borderRadius: "50%" }} />
-        <img
-          src="/images/pic1.png"
-          alt="Vineeta"
-          style={{ width: 500, height: "auto", display: "block", position: "relative", zIndex: 2, filter: "drop-shadow(0 0 40px rgba(147,51,234,0.6))" }}
+      <a
+        href="#work"
+        aria-label="Scroll to work"
+        style={{
+          position: "absolute",
+          bottom: 26,
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 1,
+          fontFamily: "var(--font-mono)",
+          fontSize: 10,
+          letterSpacing: "0.2em",
+          color: "var(--text-mute)",
+          textDecoration: "none",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 8,
+        }}
+      >
+        SCROLL
+        <span
+          style={{
+            width: 1,
+            height: 34,
+            background: "linear-gradient(var(--violet), transparent)",
+            animation: "floaty 2s ease-in-out infinite",
+          }}
         />
-      </div>
+      </a>
 
+      <style>{`
+        @media (max-width: 900px) {
+          .hero-canvas { left: 0 !important; opacity: 0.6; }
+        }
+      `}</style>
     </section>
   );
 }

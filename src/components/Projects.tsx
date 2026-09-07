@@ -1,42 +1,142 @@
 "use client";
-const projects = [
-  { num: "01", icon: "🤖", title: "AI Chess Engine", tech: "Python · React · Minimax", tag: "AI/ML", stars: 142, border: "#6b21a8", bg: "#130b20", accent: "#b026ff" },
-  { num: "02", icon: "📊", title: "Game Analytics", tech: "Firebase · Next.js", tag: "Real-time", stars: 89, border: "#0369a1", bg: "#0c1520", accent: "#38bdf8" },
-  { num: "03", icon: "🎮", title: "Gesture Controller", tech: "TensorFlow.js · CV", tag: "ML", stars: 203, border: "#15803d", bg: "#0d1a0e", accent: "#4ade80" },
-  { num: "04", icon: "⚡", title: "Dev Toolkit", tech: "Node.js · CLI · OSS", tag: "OSS", stars: 67, border: "#b45309", bg: "#1a1008", accent: "#fbbf24" },
-];
+import { useRef } from "react";
+import Reveal from "./Reveal";
+import { PROJECTS, type Project } from "@/lib/data";
+
+function ArrowIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M7 17 17 7M7 7h10v10" />
+    </svg>
+  );
+}
+
+function GitIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48l-.01-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85l-.01 2.75c0 .27.18.58.69.48A10 10 0 0 0 22 12 10 10 0 0 0 12 2Z" />
+    </svg>
+  );
+}
+
+function Card({ p, i }: { p: Project; i: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const onMove = (e: React.MouseEvent) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    el.style.transform = `perspective(900px) rotateY(${px * 6}deg) rotateX(${-py * 6}deg) translateY(-4px)`;
+  };
+  const reset = () => {
+    if (ref.current) ref.current.style.transform = "perspective(900px) rotateY(0) rotateX(0) translateY(0)";
+  };
+
+  return (
+    <Reveal delay={i * 70}>
+      <div
+        ref={ref}
+        onMouseMove={onMove}
+        onMouseLeave={reset}
+        className="card card-glow"
+        style={{
+          padding: 22,
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          transition: "transform 0.18s ease-out, box-shadow 0.3s",
+          willChange: "transform",
+        }}
+      >
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            top: -30,
+            right: -10,
+            fontFamily: "var(--font-mono)",
+            fontSize: 90,
+            fontWeight: 700,
+            color: p.accent,
+            opacity: 0.07,
+            lineHeight: 1,
+          }}
+        >
+          {String(i + 1).padStart(2, "0")}
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
+          <h3 style={{ fontSize: 19, fontWeight: 700, letterSpacing: "-0.01em" }}>{p.title}</h3>
+          <span className="mono" style={{ fontSize: 11, color: "var(--text-mute)" }}>{p.year}</span>
+        </div>
+
+        <p style={{ marginTop: 10, fontSize: 13.5, color: "var(--text-dim)", lineHeight: 1.6, flex: 1 }}>
+          {p.blurb}
+        </p>
+
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 16 }}>
+          {p.tech.map((t) => (
+            <span key={t} className="chip" style={{ fontSize: 10 }}>{t}</span>
+          ))}
+        </div>
+
+        <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
+          {p.live && (
+            <a
+              href={p.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mono"
+              style={{ fontSize: 11.5, color: p.accent, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 5 }}
+            >
+              live <ArrowIcon />
+            </a>
+          )}
+          {p.repo && (
+            <a
+              href={p.repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mono"
+              style={{ fontSize: 11.5, color: "var(--text-dim)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 5 }}
+            >
+              <GitIcon /> code
+            </a>
+          )}
+        </div>
+      </div>
+    </Reveal>
+  );
+}
 
 export default function Projects() {
   return (
-    <section id="projects" style={{ padding: "80px 24px", background: "#0a0812" }}>
-      <div style={{ maxWidth: 900, margin: "0 auto" }}>
-        <div className="mono" style={{ fontSize: 11, letterSpacing: "0.18em", color: "#ff2d78", marginBottom: 32, display: "flex", alignItems: "center", gap: 12 }}>
-          // featured_projects.exe
-          <div style={{ flex: 1, height: 1, background: "rgba(255,45,120,0.2)" }} />
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-          {projects.map((p) => (
-            <div
-              key={p.num}
-              style={{ position: "relative", borderRadius: 12, padding: 16, border: `1.5px solid ${p.border}`, background: p.bg, cursor: "pointer", transition: "all 0.25s" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = p.accent; (e.currentTarget as HTMLElement).style.transform = "translateY(-3px)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = p.border; (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}
-            >
-              <div style={{ position: "absolute", top: 7, left: 7, width: 12, height: 12, borderTop: `2px solid ${p.accent}`, borderLeft: `2px solid ${p.accent}` }} />
-              <div style={{ position: "absolute", bottom: 7, right: 7, width: 12, height: 12, borderBottom: `2px solid ${p.accent}`, borderRight: `2px solid ${p.accent}` }} />
-              <div className="mono" style={{ fontSize: 32, fontWeight: 700, opacity: 0.08, position: "absolute", right: 14, top: 8, color: p.accent }}>{p.num}</div>
-              <div style={{ fontSize: 20, marginBottom: 8 }}>{p.icon}</div>
-              <div style={{ fontSize: 15, fontWeight: 600, color: "#f0eaff" }}>{p.title}</div>
-              <div style={{ fontSize: 12, marginTop: 4, color: p.accent }}>{p.tech}</div>
-              <div style={{ marginTop: 12, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span className="mono" style={{ fontSize: 10, fontWeight: 700, padding: "2px 10px", borderRadius: 99, border: `1.5px solid ${p.border}`, color: p.accent, background: p.bg }}>
-                  {p.tag}
-                </span>
-                <span className="mono" style={{ fontSize: 11, color: p.accent }}>★ {p.stars}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+    <section id="work" className="section">
+      <Reveal>
+        <div className="eyebrow" style={{ color: "var(--violet)" }}>// selected_work</div>
+        <h2 className="h2">Things I&apos;ve built</h2>
+        <p className="lead">
+          Real projects from{" "}
+          <a href="https://github.com/vineeta007" target="_blank" rel="noopener noreferrer" style={{ color: "var(--violet)" }}>
+            github.com/vineeta007
+          </a>
+          {" "}— shipped apps, AI experiments and coursework I kept iterating on.
+        </p>
+      </Reveal>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+          gap: 16,
+          marginTop: 44,
+        }}
+      >
+        {PROJECTS.map((p, i) => (
+          <Card key={p.key} p={p} i={i} />
+        ))}
       </div>
     </section>
   );
